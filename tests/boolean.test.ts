@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParamsObject } from "..";
+import { searchParamsObject } from "../src";
 
 test("Boolean parsing - true", () => {
   const schema = searchParamsObject({

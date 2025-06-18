@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParamsObject } from "..";
+import { searchParamsObject } from "../src";
 import { expectFirstIssueToBe } from "./utils";
 
 test("Literal string parsing", () => {

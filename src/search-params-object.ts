@@ -17,7 +17,7 @@ type AllowedLiteral =
   | ZodLiteral<boolean>
   | ZodLiteral<bigint>;
 
-export type AllowedParamPrimitives =
+type AllowedParamPrimitives =
   | ZodString
   | ZodNumber
   | ZodBigInt
@@ -25,10 +25,12 @@ export type AllowedParamPrimitives =
   | AllowedLiteral
   | ZodStringFormat<$ZodStringFormats>;
 
-export type AllowedParamType =
+export type SearchParamsObjectValue =
   | AllowedParamPrimitives
   | ZodBoolean
   | ZodOptional<AllowedParamPrimitives>;
+
+export type SearchParamsObject = Record<string, SearchParamsObjectValue>;
 
 type ParseInstruction = {
   type: "string" | "number" | "boolean" | "bigint";
@@ -99,7 +101,7 @@ const processPrimitive = (
   console.warn(`Type "${schema?.def?.type}" is not supported by searchParams.`);
 };
 
-const processType = (schema: AllowedParamType): ParseInstruction => {
+const processType = (schema: SearchParamsObjectValue): ParseInstruction => {
   switch (schema.def.type) {
     case "optional":
       const { type } = processPrimitive(schema.def.innerType);
@@ -108,9 +110,7 @@ const processType = (schema: AllowedParamType): ParseInstruction => {
   return processPrimitive(schema as AllowedParamPrimitives);
 };
 
-export const searchParamsObject = <
-  Params extends Record<string, AllowedParamType>,
->(
+export const searchParamsObject = <Params extends SearchParamsObject>(
   paramsSchema: Params,
 ) => {
   const parseInstructions = Object.entries(paramsSchema).map(
@@ -122,7 +122,7 @@ export const searchParamsObject = <
 
   const fullSchema = z.object(paramsSchema);
 
-  return z.preprocess((searchParamString: string) => {
+  return z.preprocess((searchParamString: string | URLSearchParams) => {
     const searchParams = new URLSearchParams(searchParamString);
 
     const entries = parseInstructions.map(({ instruction, key }) => [
