@@ -4,20 +4,21 @@
   "description": "Type-safe URL search parameters parsing and serialization using Zod schemas",
   "keywords": [
     "zod",
-    "search-params",
+    "searchparams",
     "url",
     "typescript",
     "validation",
-    "query-string"
+    "schema",
+    "queryparams"
   ],
-  "author": "",
+  "author": "FalkZ",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/FalkZ/zod-search-params.git"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/FalkZ/zod-search-params/issues"
   },
   "homepage": "",
   "main": "./build/index.cjs",
@@ -47,9 +48,6 @@
     "lint": "publint",
     "prepublishOnly": "bun run build",
     "prepack": "bun run lint"
-  },
-  "engines": {
-    "node": ">=16"
   },
   "devDependencies": {
     "@types/bun": "latest",
