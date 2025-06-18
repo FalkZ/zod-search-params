@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
 import { searchParams } from "..";
+import { expectIssuesToBe } from "./utils";
 
 test("Multiple parameters", () => {
   const schema = searchParams({
@@ -54,4 +55,37 @@ test("Duplicate parameters - uses last value", () => {
 
   const result = schema.parse("name=first&name=second");
   expect(result).toEqual({ name: "second" });
+});
+
+test("Multiple validation errors", () => {
+  const schema = searchParams({
+    name: z.string().min(5),
+    age: z.number().min(18),
+    email: z.string().email(),
+    type: z.literal("admin"),
+  });
+
+  const result = schema.safeParse("name=hi&age=15&email=invalid&type=user");
+  expectIssuesToBe(result, [
+    {
+      code: "too_small",
+      path: ["name"],
+      message: "Too small: expected string to have >=5 characters",
+    },
+    {
+      code: "too_small",
+      path: ["age"],
+      message: "Too small: expected number to be >=18",
+    },
+    {
+      code: "invalid_format",
+      path: ["email"],
+      message: "Invalid email address",
+    },
+    {
+      code: "invalid_value",
+      path: ["type"],
+      message: 'Invalid input: expected "admin"',
+    },
+  ]);
 });

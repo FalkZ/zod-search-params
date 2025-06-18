@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
 import { searchParams } from "..";
+import { expectFirstIssueToBe } from "./utils";
 
 test("BigInt parsing", () => {
   const schema = searchParams({
@@ -34,5 +35,36 @@ test("Invalid bigint should cause validation error", () => {
     big: z.bigint(),
   });
 
-  expect(() => schema.parse("big=invalid")).toThrow();
+  const result = schema.safeParse("big=invalid");
+  expectFirstIssueToBe(result, {
+    code: "invalid_type",
+    path: ["big"],
+    message: "Invalid input: expected bigint, received undefined",
+  });
+});
+
+test("BigInt too small should cause validation error", () => {
+  const schema = searchParams({
+    big: z.bigint().min(100n),
+  });
+
+  const result = schema.safeParse("big=50");
+  expectFirstIssueToBe(result, {
+    code: "too_small",
+    path: ["big"],
+    message: "Too small: expected bigint to be >=100",
+  });
+});
+
+test("BigInt too big should cause validation error", () => {
+  const schema = searchParams({
+    big: z.bigint().max(1000n),
+  });
+
+  const result = schema.safeParse("big=2000");
+  expectFirstIssueToBe(result, {
+    code: "too_big",
+    path: ["big"],
+    message: "Too big: expected bigint to be <=1000",
+  });
 });

@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
 import { searchParams } from "..";
+import { expectFirstIssueToBe } from "./utils";
 
 test("Number parsing", () => {
   const schema = searchParams({
@@ -43,5 +44,49 @@ test("Invalid number should cause validation error", () => {
     num: z.number(),
   });
 
-  expect(() => schema.parse("num=invalid")).toThrow();
+  const result = schema.safeParse("num=invalid");
+  expectFirstIssueToBe(result, {
+    code: "invalid_type",
+    path: ["num"],
+    message: "Invalid input: expected number, received undefined",
+  });
+});
+
+test("Number too small should cause validation error", () => {
+  const schema = searchParams({
+    num: z.number().min(10),
+  });
+
+  const result = schema.safeParse("num=5");
+  expectFirstIssueToBe(result, {
+    code: "too_small",
+    path: ["num"],
+    message: "Too small: expected number to be >=10",
+  });
+});
+
+test("Number too big should cause validation error", () => {
+  const schema = searchParams({
+    num: z.number().max(100),
+  });
+
+  const result = schema.safeParse("num=200");
+  expectFirstIssueToBe(result, {
+    code: "too_big",
+    path: ["num"],
+    message: "Too big: expected number to be <=100",
+  });
+});
+
+test("Number not integer should cause validation error", () => {
+  const schema = searchParams({
+    num: z.number().int(),
+  });
+
+  const result = schema.safeParse("num=3.14");
+  expectFirstIssueToBe(result, {
+    code: "invalid_type",
+    path: ["num"],
+    message: "Invalid input: expected int, received number",
+  });
 });

@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
 import { searchParams } from "..";
+import { expectFirstIssueToBe } from "./utils";
 
 test("Basic string parsing", () => {
   const schema = searchParams({
@@ -52,7 +53,12 @@ test("String too short should cause validation error", () => {
     str: z.string().min(5),
   });
 
-  expect(() => schema.parse("str=hi")).toThrow();
+  const result = schema.safeParse("str=hi");
+  expectFirstIssueToBe(result, {
+    code: "too_small",
+    path: ["str"],
+    message: "Too small: expected string to have >=5 characters",
+  });
 });
 
 test("String too long should cause validation error", () => {
@@ -60,5 +66,23 @@ test("String too long should cause validation error", () => {
     str: z.string().max(3),
   });
 
-  expect(() => schema.parse("str=toolong")).toThrow();
+  const result = schema.safeParse("str=toolong");
+  expectFirstIssueToBe(result, {
+    code: "too_big",
+    path: ["str"],
+    message: "Too big: expected string to have <=3 characters",
+  });
+});
+
+test("Invalid email should cause validation error", () => {
+  const schema = searchParams({
+    email: z.string().email(),
+  });
+
+  const result = schema.safeParse("email=invalid-email");
+  expectFirstIssueToBe(result, {
+    code: "invalid_format",
+    path: ["email"],
+    message: "Invalid email address",
+  });
 });

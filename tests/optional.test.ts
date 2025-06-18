@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
 import { searchParams } from "..";
+import { expectFirstIssueToBe } from "./utils";
 
 test("Optional parameter - provided", () => {
   const schema = searchParams({
@@ -60,5 +61,10 @@ test("Missing required parameter should cause validation error", () => {
     required: z.string(),
   });
 
-  expect(() => schema.parse("")).toThrow();
+  const result = schema.safeParse("");
+  expectFirstIssueToBe(result, {
+    code: "invalid_type",
+    path: ["required"],
+    message: "Invalid input: expected string, received undefined",
+  });
 });

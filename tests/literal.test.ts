@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
 import { searchParams } from "..";
+import { expectFirstIssueToBe } from "./utils";
 
 test("Literal string parsing", () => {
   const schema = searchParams({
@@ -34,5 +35,36 @@ test("Wrong literal value should cause validation error", () => {
     type: z.literal("admin"),
   });
 
-  expect(() => schema.parse("type=user")).toThrow();
+  const result = schema.safeParse("type=user");
+  expectFirstIssueToBe(result, {
+    code: "invalid_value",
+    path: ["type"],
+    message: 'Invalid input: expected "admin"',
+  });
+});
+
+test("Wrong literal number should cause validation error", () => {
+  const schema = searchParams({
+    version: z.literal(1),
+  });
+
+  const result = schema.safeParse("version=2");
+  expectFirstIssueToBe(result, {
+    code: "invalid_value",
+    path: ["version"],
+    message: "Invalid input: expected 1",
+  });
+});
+
+test("Invalid template literal should cause validation error", () => {
+  const schema = searchParams({
+    greeting: z.templateLiteral(["hello-", z.number(), "-world"]),
+  });
+
+  const result = schema.safeParse("greeting=hello-abc-world");
+  expectFirstIssueToBe(result, {
+    code: "invalid_format",
+    path: ["greeting"],
+    message: "Invalid input",
+  });
 });
