@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 import { expectFirstIssueToBe } from "./utils";
 
 test("Literal string parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     type: z.literal("admin"),
   });
 
@@ -13,7 +13,7 @@ test("Literal string parsing", () => {
 });
 
 test("Literal number parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     version: z.literal(1),
   });
 
@@ -22,7 +22,7 @@ test("Literal number parsing", () => {
 });
 
 test("Template literal parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     greeting: z.templateLiteral(["hello-", z.number(), "-world"]),
   });
 
@@ -31,7 +31,7 @@ test("Template literal parsing", () => {
 });
 
 test("Wrong literal value should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     type: z.literal("admin"),
   });
 
@@ -44,7 +44,7 @@ test("Wrong literal value should cause validation error", () => {
 });
 
 test("Wrong literal number should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     version: z.literal(1),
   });
 
@@ -57,7 +57,7 @@ test("Wrong literal number should cause validation error", () => {
 });
 
 test("Invalid template literal should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     greeting: z.templateLiteral(["hello-", z.number(), "-world"]),
   });
 

@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 
 test("Boolean parsing - true", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     flag: z.boolean(),
   });
 
@@ -12,7 +12,7 @@ test("Boolean parsing - true", () => {
 });
 
 test("Boolean parsing - false", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     flag: z.boolean(),
   });
 
@@ -21,7 +21,7 @@ test("Boolean parsing - false", () => {
 });
 
 test("Boolean parsing - case insensitive", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     flag1: z.boolean(),
     flag2: z.boolean(),
   });
@@ -31,7 +31,7 @@ test("Boolean parsing - case insensitive", () => {
 });
 
 test("Boolean missing value defaults to false", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     flag: z.boolean(),
   });
 

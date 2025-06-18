@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 import { expectFirstIssueToBe } from "./utils";
 
 test("Basic string parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     name: z.string(),
   });
 
@@ -13,7 +13,7 @@ test("Basic string parsing", () => {
 });
 
 test("String with constraints", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     str: z.string().min(2).max(10),
   });
 
@@ -22,7 +22,7 @@ test("String with constraints", () => {
 });
 
 test("Email validation", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     email: z.string().email(),
   });
 
@@ -31,7 +31,7 @@ test("Email validation", () => {
 });
 
 test("URL encoded values", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     message: z.string(),
   });
 
@@ -40,7 +40,7 @@ test("URL encoded values", () => {
 });
 
 test("Empty string parameter", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     empty: z.string(),
   });
 
@@ -49,7 +49,7 @@ test("Empty string parameter", () => {
 });
 
 test("String too short should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     str: z.string().min(5),
   });
 
@@ -62,7 +62,7 @@ test("String too short should cause validation error", () => {
 });
 
 test("String too long should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     str: z.string().max(3),
   });
 
@@ -75,7 +75,7 @@ test("String too long should cause validation error", () => {
 });
 
 test("Invalid email should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     email: z.string().email(),
   });
 

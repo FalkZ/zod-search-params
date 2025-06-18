@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 import { expectFirstIssueToBe } from "./utils";
 
 test("BigInt parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     bigNum: z.bigint(),
   });
 
@@ -13,7 +13,7 @@ test("BigInt parsing", () => {
 });
 
 test("BigInt zero parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     zero: z.bigint(),
   });
 
@@ -22,7 +22,7 @@ test("BigInt zero parsing", () => {
 });
 
 test("Negative BigInt parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     negative: z.bigint(),
   });
 
@@ -31,7 +31,7 @@ test("Negative BigInt parsing", () => {
 });
 
 test("Invalid bigint should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     big: z.bigint(),
   });
 
@@ -44,7 +44,7 @@ test("Invalid bigint should cause validation error", () => {
 });
 
 test("BigInt too small should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     big: z.bigint().min(100n),
   });
 
@@ -57,7 +57,7 @@ test("BigInt too small should cause validation error", () => {
 });
 
 test("BigInt too big should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     big: z.bigint().max(1000n),
   });
 

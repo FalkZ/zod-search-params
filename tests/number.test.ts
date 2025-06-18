@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 import { expectFirstIssueToBe } from "./utils";
 
 test("Number parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     num: z.number(),
   });
 
@@ -13,7 +13,7 @@ test("Number parsing", () => {
 });
 
 test("Number parsing with decimals", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     price: z.number(),
   });
 
@@ -22,7 +22,7 @@ test("Number parsing with decimals", () => {
 });
 
 test("Number zero parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     zero: z.number(),
   });
 
@@ -31,7 +31,7 @@ test("Number zero parsing", () => {
 });
 
 test("Negative number parsing", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     negative: z.number(),
   });
 
@@ -40,7 +40,7 @@ test("Negative number parsing", () => {
 });
 
 test("Invalid number should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     num: z.number(),
   });
 
@@ -53,7 +53,7 @@ test("Invalid number should cause validation error", () => {
 });
 
 test("Number too small should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     num: z.number().min(10),
   });
 
@@ -66,7 +66,7 @@ test("Number too small should cause validation error", () => {
 });
 
 test("Number too big should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     num: z.number().max(100),
   });
 
@@ -79,7 +79,7 @@ test("Number too big should cause validation error", () => {
 });
 
 test("Number not integer should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     num: z.number().int(),
   });
 

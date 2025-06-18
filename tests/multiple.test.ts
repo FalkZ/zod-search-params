@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 import { expectIssuesToBe } from "./utils";
 
 test("Multiple parameters", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     name: z.string(),
     age: z.number(),
     active: z.boolean(),
@@ -15,7 +15,7 @@ test("Multiple parameters", () => {
 });
 
 test("Complex schema with all types", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     str: z.string(),
     str2: z.string().min(2).max(10),
     str3: z.string().email(),
@@ -49,7 +49,7 @@ test("Complex schema with all types", () => {
 });
 
 test("Duplicate parameters - uses last value", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     name: z.string(),
   });
 
@@ -58,7 +58,7 @@ test("Duplicate parameters - uses last value", () => {
 });
 
 test("Multiple validation errors", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     name: z.string().min(5),
     age: z.number().min(18),
     email: z.string().email(),

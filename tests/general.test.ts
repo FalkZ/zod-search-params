@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 
 test("Allow ? at the beginning", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     name: z.string(),
   });
 
@@ -12,7 +12,7 @@ test("Allow ? at the beginning", () => {
 });
 
 test("Last param wins", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     name: z.string(),
   });
 

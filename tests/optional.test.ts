@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 import z from "zod/v4";
-import { searchParams } from "..";
+import { searchParamsObject } from "..";
 import { expectFirstIssueToBe } from "./utils";
 
 test("Optional parameter - provided", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     optional: z.string().optional(),
   });
 
@@ -13,7 +13,7 @@ test("Optional parameter - provided", () => {
 });
 
 test("Optional parameter - not provided", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     optional: z.string().optional(),
   });
 
@@ -22,7 +22,7 @@ test("Optional parameter - not provided", () => {
 });
 
 test("Optional number - provided", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     optNum: z.number().optional(),
   });
 
@@ -31,7 +31,7 @@ test("Optional number - provided", () => {
 });
 
 test("Optional number - not provided", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     optNum: z.number().optional(),
   });
 
@@ -40,7 +40,7 @@ test("Optional number - not provided", () => {
 });
 
 test("Mixed optional and required parameters", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     required: z.string(),
     optional: z.string().optional(),
     requiredNum: z.number(),
@@ -57,7 +57,7 @@ test("Mixed optional and required parameters", () => {
 });
 
 test("Missing required parameter should cause validation error", () => {
-  const schema = searchParams({
+  const schema = searchParamsObject({
     required: z.string(),
   });
 
