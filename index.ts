@@ -5,9 +5,11 @@ import {
   ZodNumber,
   ZodOptional,
   ZodString,
+  ZodStringFormat,
   ZodTemplateLiteral,
   z,
 } from "zod/v4";
+import type { $ZodStringFormats } from "zod/v4/core";
 
 type AllowedLiteral =
   | ZodLiteral<string>
@@ -20,7 +22,8 @@ export type AllowedParamPrimitives =
   | ZodNumber
   | ZodBigInt
   | ZodTemplateLiteral
-  | AllowedLiteral;
+  | AllowedLiteral
+  | ZodStringFormat<$ZodStringFormats>;
 
 export type AllowedParamType =
   | AllowedParamPrimitives
@@ -92,7 +95,6 @@ const processPrimitive = (
       };
   }
 
-  console.log(schema);
   // @ts-expect-error: This is only executed if someone misused the interface
   console.warn(`Type "${schema?.def?.type}" is not supported by searchParams.`);
 };
