@@ -1,18 +1,18 @@
-# zod-search-params
+# zod-url-search-params
 
 Type-safe URL search parameters using Zod schemas.
 
 ## Installation
 
 ```bash
-npm install zod-search-params zod
+npm install zod-url-search-params zod
 ```
 
 ## Quick Start
 
 ```typescript
 import { z } from "zod/v4";
-import { searchParamsObject, toSearchParams } from "zod-search-params";
+import { searchParamsObject, toSearchParams } from "zod-url-search-params";
 
 const schema = searchParamsObject({
   query: z.string(),
@@ -37,6 +37,9 @@ const urlParams = toSearchParams({ query: "world", page: 2, active: false });
 `searchParamsObject()` behaves the same way as `z.object()`. This means as long as you use [supported value types](#supported) you can create the schema in the same way as you are used to from zod.
 
 ```typescript
+import { z } from "zod/v4";
+import { searchParamsObject } from "zod-url-search-params";
+
 const schema = searchParamsObject({
   name: z.string(),
   age: z.number(),
@@ -62,13 +65,16 @@ These are all the values that `searchParamsObject` accepts.
 - [`z.templateLiteral()`](https://zod.dev/api#template-literals)
 - [`.optional()` modifier](https://zod.dev/api#optionals)
 
-If the value that is not supported, typescript will let you know that you passed in a value that does not work.
+If the value is not supported, typescript will let you know that you passed in a value that does not work.
 
 ### Serializing to URLSearchParams
 
 `toSearchParams` converts an object to URLSearchParams. When parsed by `searchParamsObject` the same object will be recreated.
 
 ```typescript
+import { toSearchParams } from "zod-url-search-params";
+
+// create new params:
 const params = toSearchParams({
   query: "hello",
   page: 1,
@@ -76,4 +82,16 @@ const params = toSearchParams({
   disabled: false,
   empty: undefined,
 });
+
+// or update existing params:
+const updatedParams = toSearchParams(
+  {
+    query: "hello",
+    page: 1,
+    active: true,
+    disabled: false,
+    empty: undefined,
+  },
+  window.location.search,
+);
 ```
