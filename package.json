@@ -1,5 +1,5 @@
 {
-  "name": "zod-url-search-params",
+  "name": "@falkz/zod-search-params",
   "version": "0.0.1",
   "description": "Type-safe URL search parameters parsing and serialization using Zod schemas",
   "keywords": [

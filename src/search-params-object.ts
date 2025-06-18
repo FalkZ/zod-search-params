@@ -1,6 +1,7 @@
 import {
   ZodBigInt,
   ZodBoolean,
+  ZodEnum,
   ZodLiteral,
   ZodNumber,
   ZodOptional,
@@ -23,6 +24,7 @@ type AllowedParamPrimitives =
   | ZodBigInt
   | ZodTemplateLiteral
   | AllowedLiteral
+  | ZodEnum
   | ZodStringFormat<$ZodStringFormats>;
 
 export type SearchParamsObjectValue =
@@ -82,6 +84,7 @@ const processPrimitive = (
   switch (schema.def.type) {
     case "string":
     case "template_literal":
+    case "enum":
       return { type: "string", optional: false };
     case "number":
       return { type: "number", optional: false };

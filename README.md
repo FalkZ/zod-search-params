@@ -1,18 +1,18 @@
-# zod-url-search-params
+# @falkz/zod-search-params
 
 Type-safe URL search parameters using Zod schemas.
 
 ## Installation
 
 ```bash
-npm install zod-url-search-params zod
+npm install @falkz/zod-search-params zod
 ```
 
 ## Quick Start
 
 ```typescript
 import { z } from "zod/v4";
-import { searchParamsObject, toSearchParams } from "zod-url-search-params";
+import { searchParamsObject, toSearchParams } from "@falkz/zod-search-params";
 
 const schema = searchParamsObject({
   query: z.string(),
@@ -34,11 +34,11 @@ const urlParams = toSearchParams({ query: "world", page: 2, active: false });
 
 ### Creating a Schema
 
-`searchParamsObject()` behaves the same way as `z.object()`. This means as long as you use [supported value types](#supported) you can create the schema in the same way as you are used to from zod.
+`searchParamsObject()` behaves the same way as `z.object()`. This means as long as you use [supported values](#supported) you can create the schema in the same way as you are used to from zod.
 
 ```typescript
 import { z } from "zod/v4";
-import { searchParamsObject } from "zod-url-search-params";
+import { searchParamsObject } from "@falkz/zod-search-params";
 
 const schema = searchParamsObject({
   name: z.string(),
@@ -55,13 +55,14 @@ const typedObject = schema.parse(new URLSearchParams("name=john&age=25"));
 const typedObject = schema.parse(window.location.search);
 ```
 
-### <span id="supported">Supported Value Types</span>
+### <span id="supported">Supported Values</span>
 
-These are all the values that `searchParamsObject` accepts.
+These are all the values the `searchParamsObject` accepts:
 
 - [`z.string()`, `z.number()`, `z.bigint()`, `z.boolean()`](https://zod.dev/api#primitives)
 - [`z.literal()`](https://zod.dev/api#literals)
 - [`z.email()`, `z.url()`, `z.uuid()`, etc.](https://zod.dev/api#string-formats)
+- [`z.enum()`](https://zod.dev/api#enums)
 - [`z.templateLiteral()`](https://zod.dev/api#template-literals)
 - [`.optional()` modifier](https://zod.dev/api#optionals)
 
@@ -69,10 +70,10 @@ If the value is not supported, typescript will let you know that you passed in a
 
 ### Serializing to URLSearchParams
 
-`toSearchParams` converts an object to URLSearchParams. When parsed by `searchParamsObject` the same object will be recreated.
+`toSearchParams` converts an object to URLSearchParams. When parsed again by `searchParamsObject` the same object will be recreated.
 
 ```typescript
-import { toSearchParams } from "zod-url-search-params";
+import { toSearchParams } from "@falkz/zod-search-params";
 
 // create new params:
 const params = toSearchParams({
